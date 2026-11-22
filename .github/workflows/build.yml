@@ -60,6 +60,9 @@ jobs:
           if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) { choco install innosetup -y --no-progress }
           & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" "/DAppVersion=${{ steps.v.outputs.version }}" installer.iss
           Compress-Archive dist/TazkiyahDownloader/* "dist/TazkiyahDownloader-${{ steps.v.outputs.version }}-portable.zip"
+          # Unversioned copies: the website links to releases/latest/download/<these names>.
+          Copy-Item "dist/TazkiyahDownloader-Setup-${{ steps.v.outputs.version }}.exe" dist/TazkiyahDownloader-Setup.exe
+          Copy-Item "dist/TazkiyahDownloader-${{ steps.v.outputs.version }}-portable.zip" dist/TazkiyahDownloader-portable.zip
 
       - uses: actions/upload-artifact@v4
         with:
@@ -73,5 +76,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/TazkiyahDownloader-Setup-*.exe
-            dist/TazkiyahDownloader-*-portable.zip
+            dist/TazkiyahDownloader-Setup*.exe
+            dist/TazkiyahDownloader-*portable.zip
